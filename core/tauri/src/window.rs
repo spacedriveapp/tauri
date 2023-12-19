@@ -1322,6 +1322,11 @@ impl<R: Runtime> Window<R> {
       .map_err(Into::into)
   }
 
+  /// TODO
+  pub fn cursor_position(&self) -> crate::Result<PhysicalPosition<f64>> {
+    self.window.dispatcher.cursor_position().map_err(Into::into)
+  }
+
   /// Maximizes this window.
   pub fn maximize(&self) -> crate::Result<()> {
     self.window.dispatcher.maximize().map_err(Into::into)
