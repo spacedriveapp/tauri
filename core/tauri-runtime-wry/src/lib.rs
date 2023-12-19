@@ -1113,6 +1113,7 @@ pub enum WindowMessage {
   ScaleFactor(Sender<f64>),
   InnerPosition(Sender<Result<PhysicalPosition<i32>>>),
   OuterPosition(Sender<Result<PhysicalPosition<i32>>>),
+  CursorPosition(Sender<Result<PhysicalPosition<f64>>>),
   InnerSize(Sender<PhysicalSize<u32>>),
   OuterSize(Sender<PhysicalSize<u32>>),
   IsFullscreen(Sender<bool>),
@@ -1401,6 +1402,10 @@ impl<T: UserEvent> Dispatch<T> for WryDispatcher<T> {
 
   fn primary_monitor(&self) -> Result<Option<Monitor>> {
     Ok(window_getter!(self, WindowMessage::PrimaryMonitor)?.map(|m| MonitorHandleWrapper(m).into()))
+  }
+
+  fn cursor_position(&self) -> Result<PhysicalPosition<f64>> {
+    window_getter!(self, WindowMessage::CursorPosition)?
   }
 
   fn available_monitors(&self) -> Result<Vec<Monitor>> {
@@ -2520,6 +2525,15 @@ fn handle_user_message<T: UserEvent>(
                   .map_err(|_| Error::FailedToSendMessage),
               )
               .unwrap(),
+            WindowMessage::CursorPosition(tx) => {
+              tx.send(
+                window
+                  .cursor_position()
+                  .map(|pos| crate::PhysicalPosition { x: pos.x, y: pos.y })
+                  .map_err(|_| Error::FailedToSendMessage),
+              )
+              .unwrap();
+            }
             WindowMessage::InnerSize(tx) => tx
               .send(PhysicalSizeWrapper(window.inner_size()).into())
               .unwrap(),

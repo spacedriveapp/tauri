@@ -589,6 +589,10 @@ impl<T: UserEvent> Dispatch<T> for MockDispatcher {
     Ok(())
   }
 
+  fn cursor_position(&self) -> Result<PhysicalPosition<f64>> {
+    todo!();
+  }
+
   fn maximize(&self) -> Result<()> {
     Ok(())
   }
