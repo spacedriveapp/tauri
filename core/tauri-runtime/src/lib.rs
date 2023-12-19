@@ -691,6 +691,9 @@ pub trait Dispatch<T: UserEvent>: Debug + Clone + Send + Sync + Sized + 'static 
   /// Updates the window title.
   fn set_title<S: Into<String>>(&self, title: S) -> Result<()>;
 
+  /// TODO
+  fn cursor_position(&self) -> Result<PhysicalPosition<f64>>;
+
   /// Maximizes the window.
   fn maximize(&self) -> Result<()>;
 
