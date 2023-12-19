@@ -1314,8 +1314,8 @@ fn on_window_event<R: Runtime>(
       },
     )?,
     WindowEvent::FileDrop(event) => match event {
-      FileDropEvent::Hovered(paths) => window.emit(WINDOW_FILE_DROP_HOVER_EVENT, paths)?,
-      FileDropEvent::Dropped(paths) => {
+      FileDropEvent::Hovered { paths, .. } => window.emit(WINDOW_FILE_DROP_HOVER_EVENT, paths)?,
+      FileDropEvent::Dropped { paths, .. } => {
         let scopes = window.state::<Scopes>();
         for path in paths {
           if path.is_file() {
