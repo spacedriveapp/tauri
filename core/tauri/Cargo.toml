@@ -98,14 +98,14 @@ tracing = { version = "0.1", optional = true }
 indexmap = { version = "1", features = [ "std", "serde" ], optional = true }
 
 [target."cfg(any(target_os = \"macos\", windows, target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies]
-rfd = { version = "0.10", optional = true, features = [ "gtk3", "common-controls-v6" ] }
+rfd = { version = "0.11", optional = true, features = [ "gtk3", "common-controls-v6" ] }
 notify-rust = { version = "4.5", optional = true }
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies]
-gtk = { version = "0.15", features = [ "v3_20" ] }
+gtk = { version = "0.16.0", features = [ "v3_24" ] }
 glib = "0.15"
-webkit2gtk = { version = "0.18.2", features = [ "v2_22" ] }
 nix = { version = "0.26.0", default-features = false, features = [ "user", "socket", "uio" ], optional = true }
+webkit2gtk = { version = "0.19.2", features = [ "v2_38" ] }
 
 [target."cfg(target_os = \"macos\")".dependencies]
 embed_plist = "1.2"

@@ -21,6 +21,8 @@ use std::{
   sync::{mpsc::Sender, Arc, Mutex},
 };
 
+use self::dpi::PhysicalPosition;
+
 type UriSchemeProtocol =
   dyn Fn(&HttpRequest) -> Result<HttpResponse, Box<dyn std::error::Error>> + Send + Sync + 'static;
 
@@ -73,9 +75,17 @@ pub enum WindowEvent {
 #[non_exhaustive]
 pub enum FileDropEvent {
   /// The file(s) have been dragged onto the window, but have not been dropped yet.
-  Hovered(Vec<PathBuf>),
+  Hovered {
+    paths: Vec<PathBuf>,
+    /// The position of the mouse cursor.
+    position: PhysicalPosition<f64>,
+  },
   /// The file(s) have been dropped onto the window.
-  Dropped(Vec<PathBuf>),
+  Dropped {
+    paths: Vec<PathBuf>,
+    /// The position of the mouse cursor.
+    position: PhysicalPosition<f64>,
+  },
   /// The file drop was aborted.
   Cancelled,
 }

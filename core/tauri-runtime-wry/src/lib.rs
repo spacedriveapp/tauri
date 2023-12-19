@@ -1039,6 +1039,7 @@ fn decode_path(path: PathBuf) -> PathBuf {
   target_os = "netbsd",
   target_os = "openbsd"
 )))]
+#[allow(unused)]
 fn decode_path(path: PathBuf) -> PathBuf {
   path
 }
@@ -1046,12 +1047,20 @@ fn decode_path(path: PathBuf) -> PathBuf {
 impl From<FileDropEventWrapper> for FileDropEvent {
   fn from(event: FileDropEventWrapper) -> Self {
     match event.0 {
-      WryFileDropEvent::Hovered(paths) => {
-        FileDropEvent::Hovered(paths.into_iter().map(decode_path).collect())
-      }
-      WryFileDropEvent::Dropped(paths) => {
-        FileDropEvent::Dropped(paths.into_iter().map(decode_path).collect())
-      }
+      WryFileDropEvent::Hovered { paths, position } => FileDropEvent::Hovered {
+        paths,
+        position: crate::PhysicalPosition {
+          x: position.x,
+          y: position.y,
+        },
+      },
+      WryFileDropEvent::Dropped { paths, position } => FileDropEvent::Dropped {
+        paths,
+        position: crate::PhysicalPosition {
+          x: position.x,
+          y: position.y,
+        },
+      },
       // default to cancelled
       // FIXME(maybe): Add `FileDropEvent::Unknown` event?
       _ => FileDropEvent::Cancelled,
@@ -3224,7 +3233,6 @@ fn create_webview<T: UserEvent>(
   } else {
     None
   };
-  let focused = window_builder.inner.window.focused;
   let window = window_builder.inner.build(event_loop).unwrap();
 
   #[cfg(feature = "tracing")]
@@ -3249,7 +3257,6 @@ fn create_webview<T: UserEvent>(
   }
   let mut webview_builder = WebViewBuilder::new(window)
     .map_err(|e| Error::CreateWebview(Box::new(e)))?
-    .with_focused(focused)
     .with_url(&url)
     .unwrap() // safe to unwrap because we validate the URL beforehand
     .with_transparent(is_window_transparent)

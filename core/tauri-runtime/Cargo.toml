@@ -42,7 +42,7 @@ version = "0.39.0"
 features = ["Win32_Foundation"]
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies]
-gtk = { version = "0.15", features = ["v3_20"] }
+gtk = { version = "0.16.0", features = ["v3_24"] }
 
 [features]
 devtools = []
